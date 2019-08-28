@@ -1,0 +1,17 @@
+{
+  "name": "twitter-v2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.9.0",
+    "graphql": "^14.5.3",
+    "mongoose": "^5.6.11"
+  },
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
