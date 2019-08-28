@@ -2,19 +2,19 @@ const { model, Schema } = require('mongoose')
 
 const postSchema = new Schema ({
     body: String,
-    userName: String,
-    createAt: String,
+    username: String,
+    createdAt: String,
     comments: [
         {
             body: String,
             userName: String,
-            createAt: String
+            createdAt: String
         }
     ],
     likes: [
         {
             userName: String,
-            createAt: String
+            createdAt: String
         }
     ],
     user: {
