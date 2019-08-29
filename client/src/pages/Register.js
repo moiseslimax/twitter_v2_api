@@ -1,41 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import gql from "graphql-tag";
+import { AuthContext } from '../context/auth'
 import { useMutation } from "@apollo/react-hooks";
+import { useForm } from '../util/hooks';
 
 import { Button, Form } from "semantic-ui-react";
 
-function Register() {
-    const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+
+function Register(props) {
+
+  const context = useContext(AuthContext);
+
+  const [errors, setErrors] = useState({});  
+ 
+  const { onChange, onSubmit, values } = useForm(registerUser, {
     username: '',
     email: '',
     password: '',
     confirmPassword: ''
-  });
-
-  const onChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  }
+  })
 
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(proxy, result) {
-      console.log(result);
+      context.login(result.data.register)
+      props.history.push('/')
     },
     onError(err){
-        console.log(err.graphQLErrors[0].extensions.exception.errors)
-        setErrors(err.graphQLErrors[0].extensions.exception.errors);
+        delete err.graphQLErrors[0].extensions.exception.stacktrace;
+        setErrors(err.graphQLErrors[0].extensions.exception);
     },
     variables: values
   });
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    addUser();
+  function registerUser(){
+      addUser();
   }
 
   return (
     <div className="form-container">
-      <Form onSubmit={onSubmit} noValidate className={loading? "loading" : ""}>
+      <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
         <h1>Register</h1>
         <Form.Input
           label="Username"
@@ -43,6 +46,7 @@ function Register() {
           placeholder="LeoChatoPrac*&%"
           name="username"
           value={values.username}
+          error={errors.username ? true : false}
           onChange={onChange}
         />
         <Form.Input
@@ -51,6 +55,7 @@ function Register() {
           placeholder="leochatao@gmail.com"
           name="email"
           value={values.email}
+          error={errors.email ? true : false}
           onChange={onChange}
         />
         <Form.Input
@@ -58,6 +63,7 @@ function Register() {
           type="password"
           placeholder="170817"
           name="password"
+          error={errors.password ? true : false}
           value={values.password}
           onChange={onChange}
         />
@@ -66,6 +72,7 @@ function Register() {
           type="password"
           placeholder="170817"
           name="confirmPassword"
+          error={errors.confirmPassword ? true : false}
           value={values.confirmPassword}
           onChange={onChange}
         />
@@ -80,7 +87,6 @@ function Register() {
             </ul>
         </div>
       )}
-          
     </div>
   );
 }
