@@ -8,7 +8,7 @@
     "bcryptjs": "^2.4.3",
     "graphql": "^14.5.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.6.11"
+    "mongoose": "^5.7.5"
   },
   "scripts": {
     "dev": "nodemon index.js"
